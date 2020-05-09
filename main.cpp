@@ -2,6 +2,8 @@
 #include <list>
 #include <iostream>
 #include <fstream>
+#include <string>
+#include <algorithm>
 
 using namespace std;
 
@@ -52,7 +54,57 @@ void bfs (vector<int> alists[], int size, int start, int target) {
 	delete [] parents;
 }
 
+bool outputCityChoices(string c[], string input, int SIZE){
+	int flag = false;
+	int found = -1;
+	int i = 0;
+	string tempInput, tempCity;
+	tempInput  = input;
+	transform(input.begin(), input.end(), tempInput.begin(), ::tolower);
+	while(i < SIZE){
+		tempCity = c[i];
+		transform(tempCity.begin(), tempCity.end(), tempCity.begin(), ::tolower);
+		found = tempCity.find(tempInput);
+		if(found != -1) {
+			cout << i << ": " << c[i] << endl;
+			flag = true;
+		}
+		i++;
+	}
+	if(!flag){
+		cout << "Sorry, there are no  cities with: \"" << input << "\" substring in them!" << endl;
+		cout << "Please try again!\n" << endl;
+		return flag;
+	}
+	return flag;
+}
+
+bool handleUserInput(string arrayOfCities[], string inputString, int SIZE){
+	if(inputString == "quit")
+		return false;
+
+	// flag is false if no cities found
+	return outputCityChoices(arrayOfCities, inputString, SIZE);
+}
+
+bool tooShort(string inputString){
+	if(inputString.size() < 2){
+		cout << "Please use at least two characters!" << endl;
+		return true;
+	}
+	return false;
+}
+
+bool invalidInputInt(int inputInt, int SIZE){
+	if(inputInt < 0 || inputInt > SIZE-1){
+		cout << "ERROR: invalid departure number entry!" << endl;
+		return true;
+	}
+	return false;
+}
+
 int main () {
+	cout << "Reading cities from file..." << endl;
 	ifstream fin("connections.txt");   // input file
 	if(!fin) {
 		cout << "Error: Failure to open the input file!";
@@ -63,6 +115,7 @@ int main () {
 	// read the file into a list
 	int i, j;
 	string str;
+	bool citiesFound;
 	list<string> listOfCities;
 	while(getline(fin, str)){
 		str.erase(0, 7);
@@ -139,12 +192,71 @@ int main () {
 
 	/**
 	TODO
-	 * create user interface
-	 	* Take input from the user
-	 	* search through a look up table and output the list of choices
 	 * take the info from the user and find the shortest path
 	 * modify the print function to produce valid output
 	*/
+
+	/*
+	 * USER INTERFACE
+	 */
+
+	string inputString, tempInputString;
+	int inputInt;
+
+	cout << "...Finished..." << endl;
+	cout << "--------------------------------------------------------------------" << endl;
+	do{
+	cout << "Please enter a departing city name or \"quit\" to exit:" << endl;
+	cin >> inputString;
+	if(tooShort(inputString)){
+		continue;
+	}
+	citiesFound = handleUserInput(arrayOfCities, inputString, SIZE);
+	if(!citiesFound){
+		continue;
+	}
+
+	cout << "\nPlease select a departing city by entering a number from the list above: " << endl;
+	cin >> tempInputString;
+	if(tempInputString == "quit") {
+		break;
+	}
+	transform(tempInputString.begin(), tempInputString.end(), tempInputString.begin(), ::tolower);
+
+
+	inputInt = stoi(tempInputString);
+	if(invalidInputInt(inputInt, SIZE)){
+		continue;
+	}
+
+
+
+	cout << "Selected Departure: " << inputInt << ": " << arrayOfCities[inputInt] << endl;
+
+	cout << "Please enter a destination city or \"quit\" to exit: ";
+	cin >> inputString;
+	if(tooShort(inputString)){
+		continue;
+	}
+	citiesFound = handleUserInput(arrayOfCities, inputString, SIZE);
+	if(!citiesFound){
+		continue;
+	}
+
+	cout << "Please select a destination by entering a number from the list above: ";
+	cin >> inputInt;
+	if(invalidInputInt(inputInt, SIZE)){
+		continue;
+	}
+
+	cout << "Selected Destination: " << inputInt << ": " << arrayOfCities[inputInt] << endl;
+
+
+
+
+
+	}while(inputString != "quit");
+
 
 
 
@@ -152,7 +264,6 @@ int main () {
 	vector<int> alists[size]; // Adjacency lists for a sample graph
 	int parents[size];
 
-	// I WILL HAVE TO DECIDE WHAT TO PUSH BASED ON THE TXT
 
 //       alists[0].push_back(1);
 	alists[0].push_back(2);		// from 0 I can go to 2

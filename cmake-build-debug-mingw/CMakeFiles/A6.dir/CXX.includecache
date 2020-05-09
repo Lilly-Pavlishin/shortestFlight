@@ -15,4 +15,8 @@ iostream
 -
 fstream
 -
+string
+-
+algorithm
+-
 
