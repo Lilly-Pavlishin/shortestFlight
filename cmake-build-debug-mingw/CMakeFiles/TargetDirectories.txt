@@ -1,0 +1,3 @@
+C:/Users/LP/workspace/DataStructs/A6/cmake-build-debug-mingw/CMakeFiles/A6.dir
+C:/Users/LP/workspace/DataStructs/A6/cmake-build-debug-mingw/CMakeFiles/edit_cache.dir
+C:/Users/LP/workspace/DataStructs/A6/cmake-build-debug-mingw/CMakeFiles/rebuild_cache.dir
