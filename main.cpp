@@ -113,7 +113,7 @@ int main () {
 	}
 
 	// read the file into a list
-	int i, j;
+	int i, j, from, to;
 	string str;
 	bool citiesFound;
 	list<string> listOfCities;
@@ -139,23 +139,13 @@ int main () {
 		i++;
 	}
 
-//	cout << "size of the listOfCities is: "<< listOfCities.size() << endl;
-//	cout << "size of arrayOfCities is : " << arrayOfCities->size() << endl;
-//
-//	i= 0;
-//	for (list<string>::iterator city=listOfCities.begin(); city!=listOfCities.end(); ++city) {
-//		cout << "list of cities at index " << i << ": " << *city << endl;
-//		cout << "array of cities at index " << i << ": " << arrayOfCities[i] << endl << endl;
-//		i++;
-//	}
-
-
+	/*
+	 * CREATING A LOOKUP TABLE
+	 */
 	vector<string> alist[SIZE];
-
-
-
 	i = 0;
 	j = 0;
+
 	while(getline(fin, str)){
 		if (str.at(0) == 'F') {
 
@@ -172,23 +162,6 @@ int main () {
 			j++;
 		}
 	}
-
-//	check if alist works
-//	i = 0;
-//	for(i = 0; i < SIZE; i++){
-//		j = 0;
-//		while(j < alist[i].size()){
-//			cout << "\n From the city of: " << arrayOfCities[i] << endl;
-//			cout << "The value of an array is at index [" << i << "][" << j << "]: "<< alist[i][j] << endl;
-//			j++;
-//		}
-//
-//	}
-
-	// output the contents of array for check
-//	for(i = 0; i < listOfCities.size(); i++)
-//		cout << arrayOfCities[i] << "\n";
-
 
 	/**
 	TODO
@@ -208,6 +181,10 @@ int main () {
 	do{
 	cout << "Please enter a departing city name or \"quit\" to exit:" << endl;
 	cin >> inputString;
+	transform(tempInputString.begin(), tempInputString.end(), tempInputString.begin(), ::tolower);
+	if(tempInputString == "quit") {
+		break;
+	}
 	if(tooShort(inputString)){
 		continue;
 	}
@@ -217,24 +194,20 @@ int main () {
 	}
 
 	cout << "\nPlease select a departing city by entering a number from the list above: " << endl;
-	cin >> tempInputString;
-	if(tempInputString == "quit") {
-		break;
-	}
-	transform(tempInputString.begin(), tempInputString.end(), tempInputString.begin(), ::tolower);
-
-
-	inputInt = stoi(tempInputString);
+	cin >> inputInt;
 	if(invalidInputInt(inputInt, SIZE)){
 		continue;
 	}
 
-
-
 	cout << "Selected Departure: " << inputInt << ": " << arrayOfCities[inputInt] << endl;
+	from = inputInt;
 
 	cout << "Please enter a destination city or \"quit\" to exit: ";
 	cin >> inputString;
+	transform(tempInputString.begin(), tempInputString.end(), tempInputString.begin(), ::tolower);
+	if(tempInputString == "quit") {
+		break;
+	}
 	if(tooShort(inputString)){
 		continue;
 	}
@@ -250,6 +223,10 @@ int main () {
 	}
 
 	cout << "Selected Destination: " << inputInt << ": " << arrayOfCities[inputInt] << endl;
+	to = inputInt;
+
+	//bfs(alist, SIZE, from, to);
+
 
 
 
