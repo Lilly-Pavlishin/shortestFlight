@@ -12,18 +12,20 @@ using namespace std;
 
 
 // traces parent pointers back from endv to startv
-void printPath(int parents[], int size, int startv, int endv) {
+void printPath(string lookup[], int parents[], int size, int startv, int endv) {
 	if (endv != startv) {
-		printPath(parents, size, startv, parents[endv]);
+		printPath(lookup, parents, size, startv, parents[endv]);
 	}
-	cout << endv << " ";
+	cout << lookup[endv];
+//	if(not the end of the list))
+//		cout << "  ---->  ";
 }
 
 
 
 //
 
-void bfs (vector<int> alists[], int size, int start, int target) {
+void bfs (string lookup[], vector<int> alists[], int size, int start, int target) {
 	int * parents = new int[size];
 	for (int i = 0; i< size; i++) parents[i] = -1;
 	parents[start] = start;
@@ -47,7 +49,7 @@ void bfs (vector<int> alists[], int size, int start, int target) {
 	}
 
 	if (found)
-		printPath(parents,size,start,target);
+		printPath(lookup, parents, size, start, target);
 	else
 		cout << "Not found";
 	cout << endl;
@@ -110,8 +112,13 @@ int main () {
 		cout << "Error: Failure to open the input file!";
 		cout << "Try putting the connections.txt into the same directory with this cpp file" << endl;
 		return -1;
+	} else{
+		cout << "Creating a look up table..." << endl;
 	}
 
+	/*
+	 * CREATING A LOOKUP TABLE
+	 */
 	// read the file into a list
 	int i, j, from, to;
 	string str;
@@ -139,13 +146,15 @@ int main () {
 		i++;
 	}
 
+	cout << "Creating an adjacency list..." << endl;
+
 	/*
-	 * CREATING A LOOKUP TABLE
+	 * Creating an adjacency list
 	 */
-	vector<string> alist[SIZE];
+	vector<int> alist[SIZE];
 	i = 0;
 	j = 0;
-
+	int k = -1;
 	while(getline(fin, str)){
 		if (str.at(0) == 'F') {
 
@@ -158,15 +167,21 @@ int main () {
 			}
 			}else if(str.at(0) == 'T' || str.at(0) == ' ') {
 			str.erase(0, 7);
-			alist[i].push_back(str);
+			while(str != arrayOfCities[k] && k < SIZE) {
+				k++;
+			}
+			alist[i].push_back(k);
 			j++;
+			k = -1;
 		}
 	}
 
+	cout << "...FINISHED..." << endl;
+
 	/**
 	TODO
-	 * take the info from the user and find the shortest path
-	 * modify the print function to produce valid output
+	 * format the print function to produce valid output
+	 * create an output.txt for submission
 	*/
 
 	/*
@@ -225,50 +240,18 @@ int main () {
 	cout << "Selected Destination: " << inputInt << ": " << arrayOfCities[inputInt] << endl;
 	to = inputInt;
 
-	//bfs(alist, SIZE, from, to);
+	cout << "Shortest Route: ";
+	bfs(arrayOfCities ,alist, SIZE, from, to);
 
+	cout << "\nMake another search? (\"yes\" or \"no\"): ";
+	cin >> inputString;
 
-
-
+	if(inputString == "no")
+		inputString = "quit";
 
 
 	}while(inputString != "quit");
 
-
-
-
-	const int size = 10;
-	vector<int> alists[size]; // Adjacency lists for a sample graph
-	int parents[size];
-
-
-//       alists[0].push_back(1);
-	alists[0].push_back(2);		// from 0 I can go to 2
-	alists[1].push_back(0);		// from 1 I can go to 0
-	alists[1].push_back(3);		// from 1 I can go to 3
-	alists[2].push_back(0);
-	alists[2].push_back(4);
-	alists[3].push_back(1);
-	alists[3].push_back(4);
-	alists[3].push_back(5);
-	alists[3].push_back(6);
-	alists[4].push_back(2);
-	alists[4].push_back(7);
-//       alists[5].push_back(3);
-	alists[5].push_back(6);
-	alists[5].push_back(8);
-	alists[6].push_back(3);
-	alists[6].push_back(5);
-	alists[7].push_back(4);
-	alists[7].push_back(8);
-	alists[8].push_back(5);
-	alists[8].push_back(7);
-	alists[9].push_back(6);
-	alists[9].push_back(7);
-	bfs(alists,size,0,9);
-	bfs(alists,size,9,0);
-	bfs(alists,size,0,1);
-	bfs(alists,size,1,0);
 
 	fin.close();
 	return 0;
