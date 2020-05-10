@@ -60,22 +60,22 @@
     <option name="version" value="1" />
   </component>
   <component name="WindowStateProjectService">
-    <state width="898" height="852" key="GridCell.Tab.0.bottom" timestamp="1589047765446">
+    <state width="898" height="852" key="GridCell.Tab.0.bottom" timestamp="1589087678099">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="898" height="852" key="GridCell.Tab.0.bottom/-2736.0.1368.912/0.0.1920.1080@0.0.1920.1080" timestamp="1589047765446" />
-    <state width="898" height="852" key="GridCell.Tab.0.center" timestamp="1589047765445">
+    <state width="898" height="852" key="GridCell.Tab.0.bottom/-2736.0.1368.912/0.0.1920.1080@0.0.1920.1080" timestamp="1589087678099" />
+    <state width="898" height="852" key="GridCell.Tab.0.center" timestamp="1589087678099">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="898" height="852" key="GridCell.Tab.0.center/-2736.0.1368.912/0.0.1920.1080@0.0.1920.1080" timestamp="1589047765445" />
-    <state width="898" height="852" key="GridCell.Tab.0.left" timestamp="1589047765445">
+    <state width="898" height="852" key="GridCell.Tab.0.center/-2736.0.1368.912/0.0.1920.1080@0.0.1920.1080" timestamp="1589087678099" />
+    <state width="898" height="852" key="GridCell.Tab.0.left" timestamp="1589087678099">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="898" height="852" key="GridCell.Tab.0.left/-2736.0.1368.912/0.0.1920.1080@0.0.1920.1080" timestamp="1589047765445" />
-    <state width="898" height="852" key="GridCell.Tab.0.right" timestamp="1589047765445">
+    <state width="898" height="852" key="GridCell.Tab.0.left/-2736.0.1368.912/0.0.1920.1080@0.0.1920.1080" timestamp="1589087678099" />
+    <state width="898" height="852" key="GridCell.Tab.0.right" timestamp="1589087678099">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="898" height="852" key="GridCell.Tab.0.right/-2736.0.1368.912/0.0.1920.1080@0.0.1920.1080" timestamp="1589047765445" />
+    <state width="898" height="852" key="GridCell.Tab.0.right/-2736.0.1368.912/0.0.1920.1080@0.0.1920.1080" timestamp="1589087678099" />
     <state width="897" height="197" key="GridCell.Tab.1.bottom" timestamp="1589046523083">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
@@ -108,16 +108,5 @@
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state x="140" y="245" width="672" height="678" key="search.everywhere.popup/-2736.0.1368.912/0.0.1920.1080@0.0.1920.1080" timestamp="1588984538630" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/main.cpp</url>
-          <line>13</line>
-          <option name="timeStamp" value="22" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>

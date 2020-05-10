@@ -12,18 +12,14 @@ using namespace std;
 
 
 // traces parent pointers back from endv to startv
-void printPath(string lookup[], int parents[], int size, int startv, int endv) {
+void printPath(string lookup[], int parents[], int size, int startv, int endv, const int endv2) {
 	if (endv != startv) {
-		printPath(lookup, parents, size, startv, parents[endv]);
+		printPath(lookup, parents, size, startv, parents[endv], endv2);
 	}
 	cout << lookup[endv];
-//	if(not the end of the list))
-//		cout << "  ---->  ";
+	if(endv != endv2)
+		cout << "  --->>   ";
 }
-
-
-
-//
 
 void bfs (string lookup[], vector<int> alists[], int size, int start, int target) {
 	int * parents = new int[size];
@@ -49,7 +45,7 @@ void bfs (string lookup[], vector<int> alists[], int size, int start, int target
 	}
 
 	if (found)
-		printPath(lookup, parents, size, start, target);
+		printPath(lookup, parents, size, start, target, target);
 	else
 		cout << "Not found";
 	cout << endl;
@@ -241,7 +237,7 @@ int main () {
 	to = inputInt;
 
 	cout << "Shortest Route: ";
-	bfs(arrayOfCities ,alist, SIZE, from, to);
+	bfs(arrayOfCities, alist, SIZE, from, to);
 
 	cout << "\nMake another search? (\"yes\" or \"no\"): ";
 	cin >> inputString;
