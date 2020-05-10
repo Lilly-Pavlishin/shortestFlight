@@ -5,11 +5,9 @@
 #include <string>
 #include <algorithm>
 
+int SIZE;
+
 using namespace std;
-
-
-
-
 
 // traces parent pointers back from endv to startv
 void printPath(string lookup[], int parents[], int size, int startv, int endv, const int endv2) {
@@ -101,69 +99,63 @@ bool invalidInputInt(int inputInt, int SIZE){
 	return false;
 }
 
-int main () {
+string* createLookupTable(){
 	cout << "Reading cities from file..." << endl;
 	ifstream fin("connections.txt");   // input file
 	if(!fin) {
 		cout << "Error: Failure to open the input file!";
 		cout << "Try putting the connections.txt into the same directory with this cpp file" << endl;
-		return -1;
+		exit(EXIT_FAILURE);
 	} else{
 		cout << "Creating a look up table..." << endl;
 	}
 
-	/*
-	 * CREATING A LOOKUP TABLE
-	 */
-	// read the file into a list
-	int i, j, from, to;
+	int i;
 	string str;
-	bool citiesFound;
 	list<string> listOfCities;
 	while(getline(fin, str)){
 		str.erase(0, 7);
 		listOfCities.push_back(str);
 	}
 
-	fin.clear();
-	fin.seekg (0, fin.beg);
-
 	listOfCities.sort();
 	listOfCities.unique();
 
-	int SIZE = listOfCities.size();
-
-	string arrayOfCities[SIZE];
+	SIZE = listOfCities.size();
+	string* look_up_table = new string[SIZE];
 
 	// copy the list into an array
 	i = 0;
 	for (list<string>::iterator city=listOfCities.begin(); city!=listOfCities.end(); ++city) {
-		arrayOfCities[i] = *city;
+		look_up_table[i] = *city;
 		i++;
 	}
 
+	fin.close();
+	return look_up_table;
+}
+
+vector<int>* createAdjacencyTable(string look_up_table[]){
+	int i, j, k;
+
 	cout << "Creating an adjacency list..." << endl;
 
-	/*
-	 * Creating an adjacency list
-	 */
-	vector<int> alist[SIZE];
-	i = 0;
-	j = 0;
-	int k = -1;
+	ifstream fin("connections.txt");
+	string str;
+
+	vector<int>* alist = new vector<int>[SIZE];
+	k = -1;
 	while(getline(fin, str)){
 		if (str.at(0) == 'F') {
-
 			i = 0;
 			j = 0;
 			str.erase(0, 7);
-
-			while (str != arrayOfCities[i] && i <= SIZE) {
+			while (str != look_up_table[i] && i <= SIZE) {
 				i++;
 			}
-			}else if(str.at(0) == 'T' || str.at(0) == ' ') {
+		}else if(str.at(0) == 'T' || str.at(0) == ' ') {
 			str.erase(0, 7);
-			while(str != arrayOfCities[k] && k < SIZE) {
+			while(str != look_up_table[k] && k < SIZE) {
 				k++;
 			}
 			alist[i].push_back(k);
@@ -173,71 +165,71 @@ int main () {
 	}
 
 	cout << "...FINISHED..." << endl;
+	cout << "------------------------------------------------------------------------" << endl;
 
-	/**
-	TODO
-	 * format the print function to produce valid output
-	 * create an output.txt for submission
-	*/
+	fin.close();
+	return alist;
+}
 
-	/*
-	 * USER INTERFACE
-	 */
+int getInput(string inputString, string look_up_table[]){
 
-	string inputString, tempInputString;
+	string tempInputString;
 	int inputInt;
+	bool citiesFound;
 
-	cout << "...Finished..." << endl;
-	cout << "--------------------------------------------------------------------" << endl;
-	do{
-	cout << "Please enter a departing city name or \"quit\" to exit:" << endl;
-	cin >> inputString;
 	transform(tempInputString.begin(), tempInputString.end(), tempInputString.begin(), ::tolower);
 	if(tempInputString == "quit") {
-		break;
+		return -2; // code for break
 	}
 	if(tooShort(inputString)){
-		continue;
+		return -3; // code for continue
 	}
-	citiesFound = handleUserInput(arrayOfCities, inputString, SIZE);
+	citiesFound = handleUserInput(look_up_table, inputString, SIZE);
 	if(!citiesFound){
-		continue;
+		return -3; // code for continue
 	}
 
 	cout << "\nPlease select a departing city by entering a number from the list above: " << endl;
 	cin >> inputInt;
 	if(invalidInputInt(inputInt, SIZE)){
-		continue;
+		return -3; // code for continue
 	}
 
-	cout << "Selected Departure: " << inputInt << ": " << arrayOfCities[inputInt] << endl;
-	from = inputInt;
+	return inputInt;
+}
+
+int main () {
+
+	int i, j, from, to;
+	string inputString;
+	int inputInt;
+
+	string* look_up_table = createLookupTable();
+	vector<int>* alist = createAdjacencyTable(look_up_table);
+
+	do{
+	cout << "Please enter a departing city name or \"quit\" to exit:" << endl;
+	cin >> inputString;
+
+	from = getInput(inputString, look_up_table);
+	if(from == -2)
+		break;
+	if(from == -3)
+		continue;
+	cout << "Selected Departure: " << from << ": " << look_up_table[from] << endl;
 
 	cout << "Please enter a destination city or \"quit\" to exit: ";
 	cin >> inputString;
-	transform(tempInputString.begin(), tempInputString.end(), tempInputString.begin(), ::tolower);
-	if(tempInputString == "quit") {
+
+	to = getInput(inputString, look_up_table);
+	if(to == -2)
 		break;
-	}
-	if(tooShort(inputString)){
+	if(to == -3)
 		continue;
-	}
-	citiesFound = handleUserInput(arrayOfCities, inputString, SIZE);
-	if(!citiesFound){
-		continue;
-	}
-
-	cout << "Please select a destination by entering a number from the list above: ";
-	cin >> inputInt;
-	if(invalidInputInt(inputInt, SIZE)){
-		continue;
-	}
-
-	cout << "Selected Destination: " << inputInt << ": " << arrayOfCities[inputInt] << endl;
-	to = inputInt;
+	cout << "Selected Destination: " << to << ": " << look_up_table[to] << endl;
 
 	cout << "Shortest Route: ";
-	bfs(arrayOfCities, alist, SIZE, from, to);
+	bfs(look_up_table, alist, SIZE, from, to);
 
 	cout << "\nMake another search? (\"yes\" or \"no\"): ";
 	cin >> inputString;
@@ -245,11 +237,8 @@ int main () {
 	if(inputString == "no")
 		inputString = "quit";
 
-
 	}while(inputString != "quit");
 
-
-	fin.close();
 	return 0;
 }
 
