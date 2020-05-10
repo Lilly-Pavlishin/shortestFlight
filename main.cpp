@@ -4,12 +4,73 @@
 #include <fstream>
 #include <string>
 #include <algorithm>
+using namespace std;
 
 int SIZE;
 
-using namespace std;
+void printPath(string lookup[], int parents[], int size, int startv, int endv, const int endv2);
+void bfs (string lookup[], vector<int> alists[], int size, int start, int target);
+bool outputCityChoices(string c[], string input, int SIZE);
+int getInput(string inputString, string look_up_table[]);
+bool handleUserInput(string arrayOfCities[], string inputString, int SIZE);
+bool tooShort(string inputString);
+bool invalidInputInt(int inputInt, int SIZE);
+string* createLookupTable();
+vector<int>* createAdjacencyTable(string look_up_table[]);
 
-// traces parent pointers back from endv to startv
+
+int main () {
+
+	// var declaration
+	int i, j, from, to;
+	string inputString;
+	int inputInt;
+
+	// creating look up and adjacency tables
+	string* look_up_table = createLookupTable();
+	vector<int>* alist = createAdjacencyTable(look_up_table);
+
+	// UI
+	do{
+	cout << "Please enter a departing city name or \"quit\" to exit:" << endl;
+	cin >> inputString;
+
+	from = getInput(inputString, look_up_table);
+	if(from == -2)
+		break;
+	if(from == -3)
+		continue;
+	cout << "Selected Departure: " << from << ": " << look_up_table[from] << endl;
+
+	cout << "Please enter a destination city or \"quit\" to exit: ";
+	cin >> inputString;
+
+	to = getInput(inputString, look_up_table);
+	if(to == -2)
+		break;
+	if(to == -3)
+		continue;
+	cout << "Selected Destination: " << to << ": " << look_up_table[to] << endl;
+
+	cout << "Shortest Route: ";
+	bfs(look_up_table, alist, SIZE, from, to);
+
+	cout << "\nMake another search? (\"yes\" or \"no\"): ";
+	cin >> inputString;
+
+	if(inputString == "no")
+		inputString = "quit";
+
+	}while(inputString != "quit");
+
+	return 0;
+}
+
+
+
+/*
+ * function to output the the shortest path
+ */
 void printPath(string lookup[], int parents[], int size, int startv, int endv, const int endv2) {
 	if (endv != startv) {
 		printPath(lookup, parents, size, startv, parents[endv], endv2);
@@ -19,6 +80,9 @@ void printPath(string lookup[], int parents[], int size, int startv, int endv, c
 		cout << "  --->>   ";
 }
 
+/*
+ * breadth first search function that
+ */
 void bfs (string lookup[], vector<int> alists[], int size, int start, int target) {
 	int * parents = new int[size];
 	for (int i = 0; i< size; i++) parents[i] = -1;
@@ -33,13 +97,13 @@ void bfs (string lookup[], vector<int> alists[], int size, int start, int target
 		if (v == target)
 			found = true;
 		else for (int i = 0; i < alists[v].size(); i++) {
-				int w = alists[v][i];
+			int w = alists[v][i];
 
-				if (parents[w] == -1) {
-					parents[w] = v;
-					q.push(w);
-				}
+			if (parents[w] == -1) {
+				parents[w] = v;
+				q.push(w);
 			}
+		}
 	}
 
 	if (found)
@@ -197,52 +261,3 @@ int getInput(string inputString, string look_up_table[]){
 
 	return inputInt;
 }
-
-int main () {
-
-	int i, j, from, to;
-	string inputString;
-	int inputInt;
-
-	string* look_up_table = createLookupTable();
-	vector<int>* alist = createAdjacencyTable(look_up_table);
-
-	do{
-	cout << "Please enter a departing city name or \"quit\" to exit:" << endl;
-	cin >> inputString;
-
-	from = getInput(inputString, look_up_table);
-	if(from == -2)
-		break;
-	if(from == -3)
-		continue;
-	cout << "Selected Departure: " << from << ": " << look_up_table[from] << endl;
-
-	cout << "Please enter a destination city or \"quit\" to exit: ";
-	cin >> inputString;
-
-	to = getInput(inputString, look_up_table);
-	if(to == -2)
-		break;
-	if(to == -3)
-		continue;
-	cout << "Selected Destination: " << to << ": " << look_up_table[to] << endl;
-
-	cout << "Shortest Route: ";
-	bfs(look_up_table, alist, SIZE, from, to);
-
-	cout << "\nMake another search? (\"yes\" or \"no\"): ";
-	cin >> inputString;
-
-	if(inputString == "no")
-		inputString = "quit";
-
-	}while(inputString != "quit");
-
-	return 0;
-}
-
-
-
-
-
