@@ -1,2 +1,2 @@
-# As6cpp
-last project for data structure class at CSUEB
+# shortestFlight
+last project for data structures class at CSUEB
